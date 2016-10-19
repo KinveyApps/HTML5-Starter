@@ -22,6 +22,7 @@ A Kinvey starter application built on the Kinvey HTML5 v3.0 SDK.
 
 1. Execute `npm install`.
 2. Execute `npm start`.
+3. Open your browser to `http://localhost:9000/`.
 
 ## License
 
