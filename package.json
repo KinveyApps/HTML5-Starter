@@ -1,0 +1,16 @@
+{
+  "name": "kinvey-html5-starter",
+  "version": "1.0.0",
+  "description": "HTML5 starter app for the Kinvey platform.",
+  "scripts": {
+    "start": "pushstate-server .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Kinvey",
+  "license": "Apache-2.0",
+  "private": true,
+  "devDependencies": {
+    "pushstate-server": "^2.1.0"
+  }
+}

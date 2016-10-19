@@ -1,0 +1,58 @@
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Kinvey HTML5 Starter - Login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/todc-bootstrap.min.css">
+    <link rel="stylesheet" href="css/login.css">
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+  </head>
+  <body>
+    <!--[if lte IE 9]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+    <![endif]-->
+
+    <div class="container login-container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Login</h3>
+            </div>
+            <div class="panel-body">
+              <form id="login-form">
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" class="form-control" id="username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+            <div class="panel-footer">
+              <div><a href="/signup.html">Don't have an account? Sign up</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/vendor/kinvey-html5-sdk.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.1.0.min.js"><\/script>')</script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/login.js"></script>
+  </body>
+</html>
