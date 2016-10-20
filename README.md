@@ -1,14 +1,6 @@
 # HTML5-Starter
 A Kinvey starter application built on the Kinvey HTML5 v3.0 SDK.
 
-## Features
-
-* Login a user.
-* Signup a user.
-* Logout a user.
-* Update a users profile.
-* Load and view books from Kinvey backend.
-
 ## Setup
 
 1. Clone the repo.
