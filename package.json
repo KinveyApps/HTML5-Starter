@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "description": "HTML5 starter app for the Kinvey platform.",
   "scripts": {
-    "start": "pushstate-server .",
+    "start": "open http://localhost:3000/ && node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Kinvey",
   "license": "Apache-2.0",
   "private": true,
-  "devDependencies": {
-    "pushstate-server": "^2.1.0"
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "express": "^4.14.0",
+    "jquery": "^3.1.1",
+    "kinvey-html5-sdk": "^3.2.1"
   }
 }

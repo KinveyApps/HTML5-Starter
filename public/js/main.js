@@ -1,8 +1,8 @@
 // Initialize Kinvey
 // Replace appKey and appSecret with your apps credentials
 Kinvey.init({
-  appKey: '',
-  appSecret: ''
+  appKey: 'kid_WJt3WXdOpx',
+  appSecret: '7cfd74e7af364c8f90b116c835f92e7d'
 });
 
 
@@ -24,3 +24,12 @@ if (activeUser === null) {
   // Update the drowdown with the account name
   $('#account-dropdown').html((activeUser.data.firstname || 'User') + ' ' + (activeUser.data.lastname || '') + ' <span class="caret"></span>');
 }
+
+/***************/
+/* REMOVE THIS */
+/***************/
+Kinvey.ping()
+  .catch(function(error) {
+    alert('It looks like something is wrong. Please check that your appKey and appSecret are correct.')
+    console.log('Kinvey Ping Failed. Response: ' + error.description);
+  });

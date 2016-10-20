@@ -14,7 +14,7 @@ A Kinvey starter application built on the Kinvey HTML5 v3.0 SDK.
 1. Clone the repo.
 2. Create an app backend using the [console](http://console.kinvey.com) for your application.
 2. Create a user (with password) using the [console](http://console.kinvey.com) for your application.
-3. Open `js/main.js` in a text editor
+3. Open `public/js/main.js` in a text editor
 4. Enter your `appKey` and `appSecret` for the app you created in step 1.
 5. Create a `books` collection and import `data/books.json`.
 
@@ -22,7 +22,6 @@ A Kinvey starter application built on the Kinvey HTML5 v3.0 SDK.
 
 1. Execute `npm install`.
 2. Execute `npm start`.
-3. Open your browser to `http://localhost:9000/`.
 
 ## License
 
