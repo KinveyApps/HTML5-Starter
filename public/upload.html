@@ -36,7 +36,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li><a href="/">Books</a></li>
-            <li><a href="/upload.html">Upload a File</a></li>
+            <li class="active"><a href="/upload.html">Upload <span class="sr-only">(current)</span></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -57,23 +57,19 @@
         <div class="col-md-6 col-md-offset-3">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">Profile</h3>
+              <h3 class="panel-title">Upload File</h3>
             </div>
             <div class="panel-body">
-              <form id="profile-form">
+              <form id="file-form">
                 <div class="form-group">
-                  <label for="username">Username</label>
-                  <input type="text" class="form-control" id="username" placeholder="Username">
+                  <label for="filename">File Name</label>
+                  <input type="text" class="form-control" id="filename" placeholder="File Name">
                 </div>
                 <div class="form-group">
-                  <label for="firstname">First Name</label>
-                  <input type="text" class="form-control" id="firstname" placeholder="First Name">
+                  <label for="file">File input</label>
+                  <input type="file" id="file">
                 </div>
-                <div class="form-group">
-                  <label for="lastname">Last Name</label>
-                  <input type="text" class="form-control" id="lastname" placeholder="Last Name">
-                </div>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">Upload</button>
               </form>
             </div>
           </div>
@@ -86,6 +82,6 @@
     <script src="/jquery/jquery.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/profile.js"></script>
+    <script src="js/upload.js"></script>
   </body>
 </html>

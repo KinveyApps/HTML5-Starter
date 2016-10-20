@@ -14,7 +14,8 @@ var activeUser = Kinvey.User.getActiveUser();
 if (activeUser === null) {
   var authorizedHrefs = [
     '/',
-    '/index.html'
+    '/index.html',
+    '/upload.html'
   ];
 
   if (authorizedHrefs.indexOf(location.pathname) !== -1) {
