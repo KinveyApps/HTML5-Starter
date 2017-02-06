@@ -111,12 +111,6 @@ var app = {
       // Get the active user
       var activeUser = Kinvey.User.getActiveUser();
 
-      // Update the form values
-      $('#username').val(activeUser.data.username);
-      $('#password').val(activeUser.data.password);
-      $('#firstname').val(activeUser.data.firstname || '');
-      $('#lastname').val(activeUser.data.lastname || '');
-
       // Prevent the form from being submitted
       event.preventDefault();
 
