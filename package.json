@@ -1,9 +1,9 @@
 {
   "name": "kinvey-html5-starter",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "HTML5 starter app for the Kinvey platform.",
   "scripts": {
-    "start": "node .",
+    "start": "node server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,9 +11,6 @@
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^3.3.7",
-    "express": "^4.14.0",
-    "jquery": "^3.1.1",
-    "kinvey-html5-sdk": "^3.2.1"
+    "express": "4.14.1"
   }
 }

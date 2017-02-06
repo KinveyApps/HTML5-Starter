@@ -18,28 +18,22 @@ if (activeUser !== null) {
     });
 
     // Create the table
-    var html = '<div class="container">\n'
-      + '<div class="row">\n'
-      +   '<div class="col-md-12">\n'
-      +     '<table class="table table-striped">\n'
-      +       '<thead>\n'
-      +         '<tr>\n'
-      +           '<th>Title</th>\n'
-      +           '<th>Author</th>\n'
-      +           '<th>ISBN</th>\n'
-      +           '<th>Review</th>\n'
-      +         '</tr>\n'
-      +       '</thead>\n'
-      +       '<tbody>\n'
-      +         rows.join('')
-      +       '</tbody>\n'
-      +      '</table>\n'
-      +     '</div>\n'
-      +   '</div>\n'
-      + '</div>\n';
+    var html = '<table class="table table-striped">\n'
+      +   '<thead>\n'
+      +     '<tr>\n'
+      +       '<th>Title</th>\n'
+      +       '<th>Author</th>\n'
+      +       '<th>ISBN</th>\n'
+      +       '<th>Review</th>\n'
+      +     '</tr>\n'
+      +   '</thead>\n'
+      +   '<tbody>\n'
+      +     rows.join('')
+      +   '</tbody>\n'
+      + '</table>\n';
 
       // Add the html to the page
-      $('#books').html(html);
+      $('#books-table').html(html);
   }
 
   // Load the books

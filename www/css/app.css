@@ -1,0 +1,18 @@
+body {
+  padding-top: 65px;
+}
+
+.login-container {
+  margin-top: 80px;
+}
+
+.signup-container {
+  margin-top: 80px;
+}
+
+
+#loading-modal {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
