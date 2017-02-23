@@ -194,8 +194,8 @@ $('#loading-modal').modal({
 
 // Initialize Kinvey
 Kinvey.initialize({
-  appKey: '',
-  appSecret: ''
+  appKey: '<appKey>',
+  appSecret: '<appSecret>'
 })
   .then(function(activeUser) {
     if (!activeUser && authorizedHrefs.indexOf(location.pathname) !== -1) {
