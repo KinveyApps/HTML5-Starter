@@ -53,31 +53,28 @@
         <div class="col-md-6 col-md-offset-3">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">Upload File</h3>
+              <h3 class="panel-title">Upload a File</h3>
             </div>
             <div class="panel-body">
               <form id="file-form">
                 <div class="form-group">
-                  <label for="filename">File Name</label>
-                  <input type="text" class="form-control" id="filename" placeholder="File Name">
-                </div>
-                <div class="form-group">
                   <label for="file">File input</label>
                   <input type="file" id="file">
+                </div>
+                <div class="form-group">
+                  <label for="filename">File Name <small>(optional)</small></label>
+                  <input type="text" class="form-control" id="filename" placeholder="File Name">
+                  <span class="help-block">The file name of the file will be used if no file name is provided.</span>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" id="public">
+                    Upload as a public image
+                  </label>
                 </div>
                 <button type="submit" class="btn btn-primary">Upload</button>
               </form>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="loading-modal" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <p>Loading app...</p>
           </div>
         </div>
       </div>

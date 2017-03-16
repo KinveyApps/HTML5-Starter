@@ -33,7 +33,7 @@ var app = {
       });
 
       // Create the table
-      var html = '<table data-toggle="table" data-toolbar="#toolbar" class="table table-striped">\n'
+      var html = '<table class="table table-striped">\n'
         +   '<thead>\n'
         +     '<tr>\n'
         +       '<th>Title</th>\n'
@@ -52,12 +52,12 @@ var app = {
     }
 
     // Load the books
-    var store = Kinvey.DataStore.collection('books');
+    var store = Kinvey.DataStore.collection('books', Kinvey.DataStoreType.Cache);
     store.find()
       .subscribe(function(books) {
-        renderTable(books, '#books-table')
+        return renderTable(books, '#books-table')
       }, function(error) {
-        console.log(error);
+        alert(error.message);
       });
   },
 
@@ -148,10 +148,11 @@ var app = {
 
       if (file) {
         var filename = $('#filename').val();
+        var public = document.getElementById('public').checked;
         filename = filename || filename !== '' ? filename : file.name;
 
         // Upload the file
-        Kinvey.Files.upload(file, { filename: filename, public: true })
+        Kinvey.Files.upload(file, { filename: filename, public: public }, { timeout: 10 * 60 * 1000 })
           .then(function() {
             $('#file-form').append('<p id="upload-success" class="text-success" style="margin-top: 10px;">File uploaded!</p>');
           })
@@ -174,7 +175,7 @@ var authorizedHrefs = [
 
 // Bind events
 function bindEvents() {
-  return new Promise(function(resolve) {
+  return new RSVP.Promise(function(resolve) {
     var elementEventKeys = Object.keys(app.events);
     elementEventKeys.forEach(function(elementEventKey) {
       var element = elementEventKey.split(' ')[0];
@@ -184,13 +185,6 @@ function bindEvents() {
     resolve();
   });
 }
-
-// Show the loading modal
-$('#loading-modal').modal({
-  backdrop: false,
-  keyboard: false,
-  show: true
-});
 
 // Initialize Kinvey
 Kinvey.initialize({
@@ -205,9 +199,11 @@ Kinvey.initialize({
     }
   })
   .then(function() {
-    $('#loading-modal').modal('hide');
+    var event = new Event('app.ready');
+    document.dispatchEvent(event);
   })
   .catch(function(error) {
+    alert(error.message);
     console.log(error);
   });
 
