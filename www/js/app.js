@@ -1,64 +1,17 @@
 var app = {
   events: {
-    // Books;;
-    '#reload-books-button click': 'reloadBooks',
-
-    // Files
-    '#file-form submit': 'uploadFile',
+    // Signup
+    '#signup-form submit': 'signup',
 
     // Login
     '#login-form submit': 'login',
+    '#login-with-mic click': 'loginWithMIC',
+
+    // Files
+    '#upload-form submit': 'uploadFile',
 
     // Profile
-    '#profile-form submit': 'saveProfile',
-
-    // Signup
-    '#signup-form submit': 'signup'
-  },
-
-  reloadBooks: function() {
-    // Render the table
-    function renderTable(books, selector) {
-      // Default books to an empty array
-      books = books || [];
-
-      // Create the rows
-      var rows = books.map(function(book) {
-        return '<tr>\n'
-          + '<td>' + book.title + '</td>\n'
-          + '<td>' + book.author + '</td>\n'
-          + '<td>' + (book.isbn || '') + '</td>\n'
-          + '<td>' + book.review + '</td>\n'
-          + '</tr>';
-      });
-
-      // Create the table
-      var html = '<table class="table table-striped">\n'
-        +   '<thead>\n'
-        +     '<tr>\n'
-        +       '<th>Title</th>\n'
-        +       '<th>Author</th>\n'
-        +       '<th>ISBN</th>\n'
-        +       '<th>Review</th>\n'
-        +     '</tr>\n'
-        +   '</thead>\n'
-        +   '<tbody>\n'
-        +     rows.join('')
-        +   '</tbody>\n'
-        + '</table>\n';
-
-      // Add the html to the page
-      $(selector).html(html);
-    }
-
-    // Load the books
-    var store = Kinvey.DataStore.collection('books', Kinvey.DataStoreType.Cache);
-    store.find()
-      .subscribe(function(books) {
-        return renderTable(books, '#books-table')
-      }, function(error) {
-        alert(error.message);
-      });
+    '#profile-form submit': 'saveProfile'
   },
 
   login: function(event) {
@@ -66,7 +19,7 @@ var app = {
     event.preventDefault();
 
     // Remove the login-error
-    $('#login-error').remove();
+    $('#login-error').hide(0);
 
     // Get entered username and password values
     var username = $('#username').val();
@@ -78,8 +31,25 @@ var app = {
         location.replace('/');
       })
       .catch(function(error) {
-        $('#login-form').append('<p id="login-error" class="text-danger" style="margin-top: 10px;">' + error.message + '</p>');
+        $('#login-error').html('<p>' + error.message + '</p>').show(0);
       });
+    },
+
+    loginWithMIC: function(event) {
+      // Prevent the form from being submitted
+      event.preventDefault();
+
+      // Remove the login-error
+      $('#login-error').hide(0);
+
+      // Login with Mobile Identity Connect
+      Kinvey.User.loginWithMIC('<micRedirectUri>')
+        .then(function() {
+          location.replace('/');
+        })
+        .catch(function(error) {
+          $('#login-error').html('<p>' + error.message + '</p>').show(0);
+        });
     },
 
     signup: function(event) {
@@ -87,7 +57,7 @@ var app = {
       event.preventDefault();
 
       // Remove the signup-error
-      $('#signup-error').remove();
+      $('#signup-error').hide(0);
 
       // Get entered values
       var data = {
@@ -103,8 +73,137 @@ var app = {
           location.replace('/');
         })
         .catch(function(error) {
-          $('#signup-form').append('<p id="signup-error" class="text-danger" style="margin-top: 10px;">' + error.message + '</p>');
+          $('#signup-error').html('<p>' + error.message + '</p>').show(0);
         });
+    },
+
+    loadBooks: function(dataStoreType) {
+      // Render the table
+      function renderTable(books, selector) {
+        // Default books to an empty array
+        books = books || [];
+
+        // Create the rows
+        var rows = books.map(function(book) {
+          return '<tr>\n'
+            + '<td>' + book.title + '</td>\n'
+            + '<td>' + book.author + '</td>\n'
+            + '<td>' + (book.isbn || '') + '</td>\n'
+            + '<td>' + book.review + '</td>\n'
+            + '</tr>';
+        });
+
+        // Create the table
+        var html = '<table class="table table-striped">\n'
+          +   '<thead>\n'
+          +     '<tr>\n'
+          +       '<th>Title</th>\n'
+          +       '<th>Author</th>\n'
+          +       '<th>ISBN</th>\n'
+          +       '<th>Review</th>\n'
+          +     '</tr>\n'
+          +   '</thead>\n'
+          +   '<tbody>\n'
+          +     rows.join('')
+          +   '</tbody>\n'
+          + '</table>\n';
+
+        // Add the html to the page
+        $(selector).html(html);
+      }
+
+      // Load the books
+      var store = Kinvey.DataStore.collection('books', dataStoreType);
+      store.find()
+        .subscribe(function(books) {
+          return renderTable(books, '#books-table')
+        });
+    },
+
+    loadFiles: function() {
+      // Render the table
+      function renderTable(files, selector) {
+        // Default files to an empty array
+        files = files || [];
+
+        // Create the rows
+        var rows = files.map(function(file) {
+          return '<tr>\n'
+            + '<td>' + file._filename + '</td>\n'
+            + '<td>' + file.mimeType + '</td>\n'
+            + '<td>' + file._public + '</td>\n'
+            + '<td><a target="_blank" href="' + file._downloadURL + '">Download URL</a></td>\n'
+            + '</tr>';
+        });
+
+        // Create the table
+        var html = '<table class="table table-striped">\n'
+          +   '<thead>\n'
+          +     '<tr>\n'
+          +       '<th>Filename</th>\n'
+          +       '<th>MIME Type</th>\n'
+          +       '<th>Public</th>\n'
+          +       '<th>Url</th>\n'
+          +     '</tr>\n'
+          +   '</thead>\n'
+          +   '<tbody>\n'
+          +     rows.join('')
+          +   '</tbody>\n'
+          + '</table>\n';
+
+        // Add the html to the page
+        $(selector).html(html);
+      }
+
+      // Load the files
+      Kinvey.Files.find(null, { tls: false })
+        .then(function(files) {
+          return renderTable(files, '#files-table')
+        });
+    },
+
+    uploadFile: function(event) {
+      // Prevent the form from being submitted
+      event.preventDefault();
+
+      // Remove the upload-success and upload-error
+      $('#upload-success').hide(0);
+      $('#upload-error').hide(0);
+
+      // Get entered values
+      var file = $('#file')[0].files[0];
+
+      if (file) {
+        var filename = $('#filename').val();
+        var public = document.getElementById('public').checked;
+        filename = filename || filename !== '' ? filename : file.name;
+
+        // Show progress
+        $('#upload-progress').show(0);
+
+        // Upload the file
+        Kinvey.Files.upload(file, { filename: filename, public: public }, { timeout: 10 * 60 * 1000 })
+          .then(function() {
+            // Hide progress
+            $('#upload-progress').hide(0);
+
+            // Show success message
+            $('#upload-success').html('<p>File uploaded!</p>').show(0);
+          })
+          .catch(function(error) {
+            // Hide progress
+            $('#upload-progress').hide(0);
+
+            // Show error message
+            $('#upload-error').html('<p>' + error.message + '</p>').show(0);
+          });
+      } else {
+        // Hide progress
+        $('#upload-progress').hide(0);
+
+        // Show error message
+        $('#upload-error').html('<p>Please select a file to upload.</p>').show(0);
+      }
     },
 
     saveProfile: function(event) {
@@ -115,8 +214,8 @@ var app = {
       event.preventDefault();
 
       // Remove the profile-success and profile-error
-      $('#profile-success').remove();
-      $('#profile-error').remove();
+      $('#profile-success').hide(0);
+      $('#profile-error').hide(0);
 
       // Get entered values
       var data = {
@@ -128,40 +227,11 @@ var app = {
       // Login to Kinvey
       activeUser.update(data)
         .then(function() {
-          $('#profile-form').append('<p id="profile-success" class="text-success" style="margin-top: 10px;">Profile updated!</p>');
+          $('#profile-success').html('<p>Profile updated!</p>').show(0);
         })
         .catch(function(error) {
-          $('#profile-form').append('<p id="profile-error" class="text-danger" style="margin-top: 10px;">' + error.message + '</p>');
+          $('#profile-error').html('<p>' + error.message + '</p>').show(0);
         });
-    },
-
-    uploadFile: function(event) {
-      // Prevent the form from being submitted
-      event.preventDefault();
-
-      // Remove the upload-success and upload-error
-      $('#upload-success').remove();
-      $('#upload-error').remove();
-
-      // Get entered values
-      var file = $('#file')[0].files[0];
-
-      if (file) {
-        var filename = $('#filename').val();
-        var public = document.getElementById('public').checked;
-        filename = filename || filename !== '' ? filename : file.name;
-
-        // Upload the file
-        Kinvey.Files.upload(file, { filename: filename, public: public }, { timeout: 10 * 60 * 1000 })
-          .then(function() {
-            $('#file-form').append('<p id="upload-success" class="text-success" style="margin-top: 10px;">File uploaded!</p>');
-          })
-          .catch(function(error) {
-            $('#file-form').append('<p id="upload-error" class="text-danger" style="margin-top: 10px;">' + error.message + '</p>');
-          });
-      } else {
-        $('#file-form').append('<p id="upload-error" class="text-danger" style="margin-top: 10px;">Please select a file to upload.</p>');
-      }
     }
 };
 
@@ -199,8 +269,7 @@ Kinvey.initialize({
     }
   })
   .then(function() {
-    var event = new Event('app.ready');
-    document.dispatchEvent(event);
+    $(document).trigger('app.ready');
   })
   .catch(function(error) {
     alert(error.message);

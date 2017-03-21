@@ -10,9 +10,22 @@ body {
   margin-top: 80px;
 }
 
+.panel-success {
+  background-color: #3c763d;
+  padding: 10px 20px;
+  color: white;
+}
 
-#loading-modal {
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
+.panel-success > p {
+  margin: 0;
+}
+
+.panel-error {
+  background-color: #a94442;
+  padding: 10px 20px;
+  color: white;
+}
+
+.panel-error > p {
+  margin: 0;
 }

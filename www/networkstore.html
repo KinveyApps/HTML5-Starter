@@ -63,39 +63,11 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-          <div class="panel panel-default">
-            <div id="upload-success" class="panel-success" style="display: none;"></div>
-            <div id="upload-error" class="panel-error" style="display: none;"></div>
-            <div class="panel-heading">
-              <h3 class="panel-title">Upload a File</h3>
-            </div>
-            <div class="panel-body">
-              <form id="upload-form">
-                <div class="form-group">
-                  <label for="file">File input</label>
-                  <input type="file" id="file">
-                </div>
-                <div class="form-group">
-                  <label for="filename">File Name <small>(optional)</small></label>
-                  <input type="text" class="form-control" id="filename" placeholder="File Name">
-                  <span class="help-block">The file name of the file will be used if no file name is provided.</span>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" id="public">
-                    Upload as a public image
-                  </label>
-                </div>
-                <button type="submit" class="btn btn-primary">Upload</button>
-              </form>
-              <div id="upload-progress" class="progress" style="margin-top: 10px; display: none;">
-                <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
-                  Uploading File...
-                </div>
-              </div>
-            </div>
+        <div class="col-md-12">
+          <div class="page-header">
+            <h1>Books Collection <small>using a <code>NetworkStore</code></small></h1>
           </div>
+          <div id="books-table" class="table-responsive"></div>
         </div>
       </div>
     </div>
@@ -105,5 +77,10 @@
     <script src="js/rsvp.min.js"></script>
     <script src="js/kinvey-html5-sdk.min.js"></script>
     <script src="js/app.js"></script>
+    <script>
+      $(document).on('app.ready', function() {
+        app.loadBooks(Kinvey.DataStoreType.Network);
+      });
+    </script>
   </body>
 </html>

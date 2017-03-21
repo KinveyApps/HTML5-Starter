@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Kinvey HTML5 Starter</title>
+    <title>Kinvey HTML5 3.x Starter</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -19,20 +19,33 @@
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Brand</a>
+          <a class="navbar-brand" href="#">Kinvey Starter</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse" id="navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/">Books <span class="sr-only">(current)</span></a></li>
-            <li><a href="/upload.html">Upload a File</a></li>
+            <li class="dropdown">
+              <a id="books-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">DataStore <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/networkstore.html">Load using a NetworkStore</a></li>
+                <li><a href="/index.html">Load using a CacheStore</a></li>
+                <li><a href="/syncstore.html">Load using a SyncStore</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a id="books-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Files <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/files.html">View Files</a></li>
+                <li><a href="/upload.html">Upload a File</a></li>
+              </ul>
+            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -54,7 +67,7 @@
           <div class="page-header">
             <h1>Books Collection <small>using a <code>CacheStore</code></small></h1>
           </div>
-          <div id="books-table"></div>
+          <div id="books-table" class="table-responsive"></div>
         </div>
       </div>
     </div>
@@ -65,8 +78,8 @@
     <script src="js/kinvey-html5-sdk.min.js"></script>
     <script src="js/app.js"></script>
     <script>
-      document.addEventListener('app.ready', function() {
-        app.reloadBooks();
+      $(document).on('app.ready', function() {
+        app.loadBooks(Kinvey.DataStoreType.Cache);
       });
     </script>
   </body>
