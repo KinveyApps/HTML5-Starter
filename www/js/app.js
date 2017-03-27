@@ -156,7 +156,7 @@ var app = {
       }
 
       // Load the files
-      Kinvey.Files.find(null, { tls: false })
+      Kinvey.Files.find()
         .then(function(files) {
           return renderTable(files, '#files-table')
         });
