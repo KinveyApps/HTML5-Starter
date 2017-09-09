@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Kinvey HTML5 3.x Starter</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/todc-bootstrap.min.css">
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body>
+    <!--[if lte IE 9]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+    <![endif]-->
+
+    <nav class="navbar navbar-masthead navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Kinvey Starter</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a id="books-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">DataStore <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/index.html?datastoretype=Network">NetworkStore</a></li>
+                <li><a href="/index.html?datastoretype=Cache">CacheStore</a></li>
+                <li><a href="/index.html?datastoretype=Sync">SyncStore</a></li>
+              </ul>
+            </li>
+            <li><a href="/files.html">Files</a></li>
+            <li><a href="/customendpoint.html">Custom Endpoint</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a id="account-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/profile.html">Profile</a></li>
+                <li><a href="/chat.html">Chat</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/logout.html">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="page-header">
+            <h1>Live Service Chat <small>talk to other Users</small></h1>
+          </div>
+          <div class="clearfix">
+            <div class="pull-right">
+              <button type="button" class="btn btn-default" onclick="
+                function askForUsername() {
+                  var activeUserUsername = Kinvey.User.getActiveUser().username;
+                  var username = prompt('Please enter the username to connect to.');
+
+                  if (username === activeUserUsername) {
+                    alert('You entered the active users username. Please enter another users username.');
+                    return askForUsername();
+                  }
+
+                  return username;
+                }
+
+                Kinvey.User.getActiveUser().registerForLiveService()
+                  .then(function() {
+                    var username = askForUsername();
+
+                    if (username == null || username === '') {
+                      throw new Kinvey.KinveyError('Connect cancelled.');
+                    } else {
+                      var query = new Kinvey.Query();
+                      query.equalTo('username', username);
+                      return Kinvey.User.lookup(query).toPromise();
+                    }
+                  })
+                  .then(function(publishers) {
+                    if (publishers.length > 0) {
+                      window.localStorage.setItem(Kinvey.client.appKey + '.liveservice.publishers', JSON.stringify(publishers));
+                      var activeUser = Kinvey.User.getActiveUser();
+                      var streamAcl = new Kinvey.LiveService.Stream.StreamACL();
+
+                      for (var i = 0, len = publishers.length; i < len; i++) {
+                        streamAcl.addPublishers(publishers[i]._id);
+                      }
+
+                      streamAcl.addSubscribers(activeUser._id);
+                      var stream = new Kinvey.LiveService.Stream('chat');
+                      return stream.setACL(activeUser._id, streamAcl);
+                    }
+
+                    throw new Kinvey.KinveyError('No users were found matching entered username.');
+                  })
+                  .then(function(response) {
+                    var stream = new Kinvey.LiveService.Stream('chat');
+                    return stream.listen({
+                      onMessage: function(m) {
+                        alert(m);
+                      },
+                      onStatus: function(s) {
+                        console.log(s);
+                      },
+                      onError: function(e) {
+                        alert(e.message);
+                      }
+                    });
+                  })
+                  .then(function() {
+                    console.log('listening for messages');
+                  })
+                  .catch(function(error) {
+                    alert(error.message);
+                  });
+              ">Connect</button>
+              <button type="button" class="btn btn-default" onclick="
+                function askForMessage() {
+                  return prompt('What would you like to say?');
+                }
+
+                var publishers = JSON.parse(window.localStorage.getItem(Kinvey.client.appKey + '.liveservice.publishers'));
+                var message = askForMessage();
+                var stream = new Kinvey.LiveService.Stream('chat');
+
+                for (var i = 0, len = publishers.length; i < len; i++) {
+                  stream.send(publishers[i]._id, message);
+                }
+              ">Send Message</button>
+              <button type="button" class="btn btn-default" onclick="
+                var stream = new Kinvey.LiveService.Stream('chat');
+                stream.stopListening()
+                  .then(function() {
+                    console.log('Stopped listening for messages.');
+                  })
+                  .catch(function(error) {
+                    alert(error.message);
+                  });
+              ">Disconnect</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/kinvey-html5-sdk.min.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

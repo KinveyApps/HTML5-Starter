@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html class="no-js" lang="">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -34,24 +34,20 @@
             <li class="dropdown">
               <a id="books-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">DataStore <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="/networkstore.html">Load using a NetworkStore</a></li>
-                <li><a href="/index.html">Load using a CacheStore</a></li>
-                <li><a href="/syncstore.html">Load using a SyncStore</a></li>
+                <li><a href="/index.html?datastoretype=Network">NetworkStore</a></li>
+                <li><a href="/index.html?datastoretype=Cache">CacheStore</a></li>
+                <li><a href="/index.html?datastoretype=Sync">SyncStore</a></li>
               </ul>
             </li>
-            <li class="dropdown">
-              <a id="books-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Files <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="/files.html">View Files</a></li>
-                <li><a href="/upload.html">Upload a File</a></li>
-              </ul>
-            </li>
+            <li><a href="/files.html">Files</a></li>
+            <li><a href="/customendpoint.html">Custom Endpoint</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a id="account-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="/profile.html">Profile</a></li>
+                <li><a href="/chat.html">Chat</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="/logout.html">Logout</a></li>
               </ul>
@@ -63,24 +59,65 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
-          <div class="page-header">
-            <h1>Books Collection <small>using a <code>NetworkStore</code></small></h1>
+        <div class="col-md-6 col-md-offset-3">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Create a Book</h3>
+            </div>
+            <div class="panel-body">
+              <form onsubmit="
+                event.preventDefault();
+
+                // Get the datastore type
+                var dataStoreType = app.getParameterByName('datastoretype');
+                dataStoreType = dataStoreType || Kinvey.DataStoreType.Cache;
+
+                // Get entered values
+                var book = {
+                  _id: app.getParameterByName('id'),
+                  title: $('#title').val(),
+                  author: $('#author').val(),
+                  isbn: $('#isbn').val(),
+                  review: $('#review').val()
+                };
+
+                // Save the book
+                var store = Kinvey.DataStore.collection('books', dataStoreType);
+                store.save(book)
+                  .then(function(book) {
+                    location.replace('/index.html?datastoretype=' + dataStoreType);
+                  })
+                  .catch(function(error) {
+                    alert(error.message);
+                  });
+                ">
+                <div class="form-group">
+                  <label for="title">Title</label>
+                  <input type="text" class="form-control" id="title" placeholder="Title">
+                </div>
+                <div class="form-group">
+                  <label for="author">Author</label>
+                  <input type="text" class="form-control" id="author" placeholder="Author">
+                </div>
+                <div class="form-group">
+                  <label for="isbn">ISBN</label>
+                  <input type="text" class="form-control" id="isbn" placeholder="ISBN">
+                </div>
+                <div class="form-group">
+                  <label for="review">Review</label>
+                  <textarea id="review" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+              </form>
+            </div>
           </div>
-          <div id="books-table" class="table-responsive"></div>
         </div>
       </div>
     </div>
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/rsvp.min.js"></script>
     <script src="js/kinvey-html5-sdk.min.js"></script>
     <script src="js/app.js"></script>
-    <script>
-      $(document).on('app.ready', function() {
-        app.loadBooks(Kinvey.DataStoreType.Network);
-      });
-    </script>
   </body>
 </html>

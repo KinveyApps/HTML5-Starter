@@ -29,3 +29,7 @@ body {
 .panel-error > p {
   margin: 0;
 }
+
+.pagination {
+  margin: 0;
+}

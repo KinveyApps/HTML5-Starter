@@ -34,24 +34,20 @@
             <li class="dropdown">
               <a id="books-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">DataStore <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="/networkstore.html">Load using a NetworkStore</a></li>
-                <li><a href="/index.html">Load using a CacheStore</a></li>
-                <li><a href="/syncstore.html">Load using a SyncStore</a></li>
+                <li><a href="/index.html?datastoretype=Network">NetworkStore</a></li>
+                <li><a href="/index.html?datastoretype=Cache">CacheStore</a></li>
+                <li><a href="/index.html?datastoretype=Sync">SyncStore</a></li>
               </ul>
             </li>
-            <li class="dropdown">
-              <a id="books-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Files <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="/files.html">View Files</a></li>
-                <li><a href="/upload.html">Upload a File</a></li>
-              </ul>
-            </li>
+            <li><a href="/files.html">Files</a></li>
+            <li><a href="/customendpoint.html">Custom Endpoint</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a id="account-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="/profile.html">Profile</a></li>
+                <li><a href="/chat.html">Chat</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="/logout.html">Logout</a></li>
               </ul>
@@ -65,21 +61,229 @@
       <div class="row">
         <div class="col-md-12">
           <div class="page-header">
-            <h1>Books Collection <small>using a <code>CacheStore</code></small></h1>
+            <h1>DataStore <small>Books Collection</small></h1>
           </div>
           <div id="books-table" class="table-responsive"></div>
+          <div class="clearfix">
+            <div class="pull-right">
+              <button type="button" class="btn btn-default" onclick="
+                // Get the datastore type
+                var dataStoreType = app.getParameterByName('datastoretype');
+                dataStoreType = dataStoreType || Kinvey.DataStoreType.Cache;
+                reload(dataStoreType);
+              ">Reload</button>
+              <button type="button" class="btn btn-primary" onclick="
+                var ids = [];
+
+                // Get all the selected books
+                $('input:checkbox.book-checkbox').each(function () {
+                  var id = (this.checked ? $(this).val() : undefined);
+
+                  if (id) {
+                    ids.push(id);
+                  }
+                });
+
+                if (ids.length === 0) {
+                  return alert('Please select a book you would like to update.');
+                }
+
+                if (ids.length > 1) {
+                  return alert('Please select only one book to update.');
+                }
+
+                var dataStoreType = app.getParameterByName('datastoretype');
+                location.replace('/update.html?datastoretype=' + (dataStoreType || 'cache') + '&id=' + ids[0]);
+              ">Update</button>
+              <button type="button" class="btn btn-success" onclick="
+                var dataStoreType = app.getParameterByName('datastoretype');
+                location.replace('/create.html?datastoretype=' + (dataStoreType || 'cache'));
+              ">Create</button>
+              <button type="button" class="btn btn-danger" onclick="
+                var ids = [];
+
+                // Get all the selected books
+                $('input:checkbox.book-checkbox').each(function () {
+                  var id = (this.checked ? $(this).val() : undefined);
+
+                  if (id) {
+                    ids.push(id);
+                  }
+                });
+
+                if (ids.length === 0) {
+                  return alert('Please select the books you would like to remove.');
+                }
+
+                // Get the datastore type
+                var dataStoreType = app.getParameterByName('datastoretype');
+                dataStoreType = dataStoreType || Kinvey.DataStoreType.Cache;
+
+                // Remove the books
+                var query = new Kinvey.Query().contains('_id', ids);
+                var store = Kinvey.DataStore.collection('books', dataStoreType);
+                store.remove(query)
+                  .then(function(results) {
+                    reload(dataStoreType);
+                  })
+                  .catch(function(error) {
+                    alert(error.message);
+                  });
+              ">Remove</button>
+              <button type="button" class="btn btn-default" onclick="
+                var dataStoreType = app.getParameterByName('datastoretype');
+
+                if (dataStoreType === Kinvey.DataStoreType.Network) {
+                  return alert('Unable to pull for a NetworkStore.');
+                }
+
+                var store = Kinvey.DataStore.collection('books', dataStoreType);
+                store.pull()
+                  .then(function(books) {
+                    renderTable(books, '#books-table')
+                  })
+                  .catch(function(error) {
+                    alert(error.message);
+                  });
+              ">Pull</button>
+              <button type="button" class="btn btn-default" onclick="
+                var dataStoreType = app.getParameterByName('datastoretype');
+
+                if (dataStoreType === Kinvey.DataStoreType.Network) {
+                  return alert('Unable to push for a NetworkStore.');
+                }
+
+                var store = Kinvey.DataStore.collection('books', dataStoreType);
+                store.push()
+                  .then(function(results) {
+                    console.log(results);
+                    alert('Sync queue pushed.');
+                  })
+                  .catch(function(error) {
+                    alert(error.message);
+                  });
+              ">Push</button>
+              <button type="button" class="btn btn-default" onclick="
+                var dataStoreType = app.getParameterByName('datastoretype');
+
+                if (dataStoreType === Kinvey.DataStoreType.Network) {
+                  return alert('Unable to clear the sync queue for a NetworkStore.');
+                }
+
+                var store = Kinvey.DataStore.collection('books', dataStoreType);
+                store.clearSync()
+                  .then(function(results) {
+                    console.log(results);
+                    alert('Sync queue cleared.');
+                  })
+                  .catch(function(error) {
+                    alert(error.message);
+                  });
+              ">Clear Sync</button>
+
+              <button type="button" class="btn btn-default" onclick="
+                var dataStoreType = app.getParameterByName('datastoretype');
+                var store = Kinvey.DataStore.collection('books', dataStoreType);
+                store.subscribe({
+                  onMessage: (m) => {
+                    console.log(m);
+                    reload(dataStoreType);
+                  },
+                  onStatus: (s) => {
+                    console.log(s);
+                  },
+                  onError: (e) => {
+                    console.log(e);
+                  }
+                })
+                  .then(() => {
+                    alert('Subscribed to live stream for the books collection');
+                  })
+                  .catch((error) => {
+                    alert(error.message);
+                  });
+              ">Subscribe Live Stream</button>
+
+              <button type="button" class="btn btn-default" onclick="
+                var dataStoreType = app.getParameterByName('datastoretype');
+                var store = Kinvey.DataStore.collection('books', dataStoreType);
+                store.unsubscribe()
+                  .then(function() {
+                    alert('Unsubscribed from Live Stream');
+                  })
+                  .catch(function(error) {
+                    alert(error.message);
+                  });
+              ">Unsubscribe Live Stream</button>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/rsvp.min.js"></script>
     <script src="js/kinvey-html5-sdk.min.js"></script>
     <script src="js/app.js"></script>
     <script>
+      // Render the table
+      function renderTable(books, selector) {
+        // Default books to an empty array
+        books = books || [];
+
+        // Create the rows
+        var rows = books.map(function(book) {
+          return '<tr>\n'
+            + '<td><input type="checkbox" value="' + book._id + '" class="book-checkbox"/></td>'
+            + '<td>' + (book.title || '') + '</td>\n'
+            + '<td>' + (book.author || '') + '</td>\n'
+            + '<td>' + (book.isbn || '') + '</td>\n'
+            + '<td>' + (book.review || '') + '</td>\n'
+            + '</tr>';
+        });
+
+        // Create the table
+        var html = '<table class="table table-striped table-bordered">\n'
+          +   '<thead>\n'
+          +     '<tr>\n'
+          +       '<th></th>'
+          +       '<th>Title</th>\n'
+          +       '<th>Author</th>\n'
+          +       '<th>ISBN</th>\n'
+          +       '<th>Review</th>\n'
+          +     '</tr>\n'
+          +   '</thead>\n'
+          +   '<tbody>\n'
+          +     rows.join('')
+          +   '</tbody>\n'
+          + '</table>\n';
+
+        // Add the html to the page
+        $(selector).html(html);
+      }
+
+      function reload(dataStoreType) {
+        // Load the books
+        var store = Kinvey.DataStore.collection('books', dataStoreType);
+        var query = new Kinvey.Query();
+        store.find()
+          .subscribe(function(books) {
+            return renderTable(books, '#books-table')
+          });
+      }
+
       $(document).on('app.ready', function() {
-        app.loadBooks(Kinvey.DataStoreType.Cache);
+        Kinvey.User.getActiveUser().registerForLiveService()
+          .then(() => {
+            // Get the datastore type
+            var dataStoreType = app.getParameterByName('datastoretype');
+            dataStoreType = dataStoreType || Kinvey.DataStoreType.Cache;
+            reload(dataStoreType);
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
       });
     </script>
   </body>

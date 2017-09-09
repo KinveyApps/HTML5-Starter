@@ -34,24 +34,20 @@
             <li class="dropdown">
               <a id="books-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">DataStore <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="/networkstore.html">Load using a NetworkStore</a></li>
-                <li><a href="/index.html">Load using a CacheStore</a></li>
-                <li><a href="/syncstore.html">Load using a SyncStore</a></li>
+                <li><a href="/index.html?datastoretype=Network">NetworkStore</a></li>
+                <li><a href="/index.html?datastoretype=Cache">CacheStore</a></li>
+                <li><a href="/index.html?datastoretype=Sync">SyncStore</a></li>
               </ul>
             </li>
-            <li class="dropdown">
-              <a id="books-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Files <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="/files.html">View Files</a></li>
-                <li><a href="/upload.html">Upload a File</a></li>
-              </ul>
-            </li>
+            <li><a href="/files.html">Files</a></li>
+            <li><a href="/customendpoint.html">Custom Endpoint</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a id="account-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="/profile.html">Profile</a></li>
+                <li><a href="/chat.html">Chat</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="/logout.html">Logout</a></li>
               </ul>
@@ -65,13 +61,50 @@
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
           <div class="panel panel-default">
-            <div id="upload-success" class="panel-success" style="display: none;"></div>
-            <div id="upload-error" class="panel-error" style="display: none;"></div>
             <div class="panel-heading">
               <h3 class="panel-title">Upload a File</h3>
             </div>
             <div class="panel-body">
-              <form id="upload-form">
+              <form onsubmit="
+                // Prevent the form from being submitted
+                event.preventDefault();
+
+                // Get entered values
+                var file = $('#file')[0].files[0];
+
+                if (file) {
+                  var filename = $('#filename').val();
+                  var public = document.getElementById('public').checked;
+                  filename = filename || filename !== '' ? filename : file.name;
+
+                  // Show progress
+                  $('#upload-progress').show(0);
+
+                  console.log(Kinvey.Files);
+                  // Upload the file
+                  Kinvey.Files.upload(file, { filename: filename, public: public }, { timeout: 10 * 60 * 1000 })
+                    .then(function() {
+                      // Hide progress
+                      $('#upload-progress').hide(0);
+
+                      // Show success message
+                      alert('File uploaded!');
+                    })
+                    .catch(function(error) {
+                      // Hide progress
+                      $('#upload-progress').hide(0);
+
+                      // Show error message
+                      alert(error.message);
+                    });
+                } else {
+                  // Hide progress
+                  $('#upload-progress').hide(0);
+
+                  // Show error message
+                  alert('Please select a file to upload.');
+                }
+              ">
                 <div class="form-group">
                   <label for="file">File input</label>
                   <input type="file" id="file">
@@ -102,7 +135,6 @@
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/rsvp.min.js"></script>
     <script src="js/kinvey-html5-sdk.min.js"></script>
     <script src="js/app.js"></script>
   </body>

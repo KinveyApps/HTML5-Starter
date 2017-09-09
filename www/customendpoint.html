@@ -34,24 +34,20 @@
             <li class="dropdown">
               <a id="books-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">DataStore <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="/networkstore.html">Load using a NetworkStore</a></li>
-                <li><a href="/index.html">Load using a CacheStore</a></li>
-                <li><a href="/syncstore.html">Load using a SyncStore</a></li>
+                <li><a href="/index.html?datastoretype=Network">NetworkStore</a></li>
+                <li><a href="/index.html?datastoretype=Cache">CacheStore</a></li>
+                <li><a href="/index.html?datastoretype=Sync">SyncStore</a></li>
               </ul>
             </li>
-            <li class="dropdown">
-              <a id="books-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Files <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="/files.html">View Files</a></li>
-                <li><a href="/upload.html">Upload a File</a></li>
-              </ul>
-            </li>
+            <li><a href="/files.html">Files</a></li>
+            <li class="active"><a href="/customendpoint.html">Custom Endpoint</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a id="account-dropdown" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="/profile.html">Profile</a></li>
+                <li><a href="/chat.html">Chat</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="/logout.html">Logout</a></li>
               </ul>
@@ -63,24 +59,44 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
-          <div class="page-header">
-            <h1>Books Collection <small>using a <code>SyncStore</code></small></h1>
+        <div class="col-md-6 col-md-offset-3">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Execute Custom Endpoint</h3>
+            </div>
+            <div class="panel-body">
+              <form onsubmit="
+                // Prevent the form from being submitted
+                event.preventDefault();
+
+                // Get the endpoint that was entered
+                var endpoint = $('#endpoint').val();
+
+                // Execute the endpoint
+                Kinvey.CustomEndpoint.execute(endpoint)
+                  .then(function(response) {
+                    alert(response);
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                    alert(error.message);
+                  });
+              ">
+                <div class="form-group">
+                  <label for="endpoint">Endpoint</label>
+                  <input type="text" id="endpoint" name="endpoint" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Execute</button>
+              </form>
+            </div>
           </div>
-          <div id="books-table"></div>
         </div>
       </div>
     </div>
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/rsvp.min.js"></script>
     <script src="js/kinvey-html5-sdk.min.js"></script>
     <script src="js/app.js"></script>
-    <script>
-      $(document).on('app.ready', function() {
-        app.loadBooks(Kinvey.DataStoreType.Sync);
-      });
-    </script>
   </body>
 </html>

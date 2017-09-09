@@ -19,12 +19,31 @@
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
           <div class="panel panel-default">
-            <div id="signup-error" class="panel-error" style="display: none;"></div>
             <div class="panel-heading">
               <h3 class="panel-title">Sign Up</h3>
             </div>
             <div class="panel-body">
-              <form id="signup-form">
+              <form onsubmit="
+                // Prevent the form from being submitted
+                event.preventDefault();
+
+                // Get entered values
+                var data = {
+                  username: $('#username').val(),
+                  password: $('#password').val(),
+                  firstname: $('#firstname').val(),
+                  lastname: $('#lastname').val()
+                };
+
+                // Login to Kinvey
+                Kinvey.User.signup(data)
+                  .then(function() {
+                    location.replace('/');
+                  })
+                  .catch(function(error) {
+                    alert(error.message);
+                  });
+              ">
                 <div class="form-group">
                   <label for="username">Username</label>
                   <input type="text" class="form-control" id="username" placeholder="Username">
@@ -54,7 +73,6 @@
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/rsvp.min.js"></script>
     <script src="js/kinvey-html5-sdk.min.js"></script>
     <script src="js/app.js"></script>
   </body>
