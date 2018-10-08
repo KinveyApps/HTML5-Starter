@@ -3,7 +3,7 @@ const Webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 
-const dest = Path.join(__dirname, '../dist');
+const dest = Path.join(__dirname, './dist');
 
 module.exports = merge(common, {
   mode: 'development',
@@ -21,7 +21,7 @@ module.exports = merge(common, {
     rules: [
       {
         test: /\.(js)$/,
-        include: Path.resolve(__dirname, '../src'),
+        include: Path.resolve(__dirname, './src'),
         enforce: 'pre',
         loader: 'eslint-loader',
         options: {
@@ -30,7 +30,7 @@ module.exports = merge(common, {
       },
       {
         test: /\.(js)$/,
-        include: Path.resolve(__dirname, '../src'),
+        include: Path.resolve(__dirname, './src'),
         loader: 'babel-loader'
       },
       {

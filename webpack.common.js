@@ -3,14 +3,14 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const dest = Path.join(__dirname, '../dist');
+const dest = Path.join(__dirname, './dist');
 
 module.exports = {
   entry: {
-    dashboard: Path.resolve(__dirname, '../src/js/dashboard'),
-    login: Path.resolve(__dirname, '../src/js/login'),
-    logout: Path.resolve(__dirname, '../src/js/logout'),
-    polyfills: Path.resolve(__dirname, '../src/js/polyfills')
+    dashboard: Path.resolve(__dirname, './src/js/dashboard'),
+    login: Path.resolve(__dirname, './src/js/login'),
+    logout: Path.resolve(__dirname, './src/js/logout'),
+    polyfills: Path.resolve(__dirname, './src/js/polyfills')
   },
   output: {
     path: dest,
@@ -19,27 +19,27 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin([dest], { root: Path.resolve(__dirname, '..') }),
     new CopyWebpackPlugin([
-      { from: Path.resolve(__dirname, '../public'), to: 'public' }
+      { from: Path.resolve(__dirname, './public'), to: 'public' }
     ]),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: Path.resolve(__dirname, '../src/pages/dashboard.html'),
+      template: Path.resolve(__dirname, './src/pages/dashboard.html'),
       chunks: ['dashboard']
     }),
     new HtmlWebpackPlugin({
       filename: 'login.html',
-      template: Path.resolve(__dirname, '../src/pages/login.html'),
+      template: Path.resolve(__dirname, './src/pages/login.html'),
       chunks: ['login']
     }),
     new HtmlWebpackPlugin({
       filename: 'logout.html',
-      template: Path.resolve(__dirname, '../src/pages/logout.html'),
+      template: Path.resolve(__dirname, './src/pages/logout.html'),
       chunks: ['logout']
     })
   ],
   resolve: {
     alias: {
-      '~': Path.resolve(__dirname, '../src')
+      '~': Path.resolve(__dirname, './src')
     }
   },
   module: {
