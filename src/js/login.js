@@ -1,6 +1,5 @@
 import $ from 'jquery';
-import * as DataStore from 'kinvey-html5-sdk/lib/datastore';
-import { User } from 'kinvey-html5-sdk/lib/user';
+import { User } from 'kinvey-html5-sdk';
 import './app';
 import '../styles/login.scss';
 
