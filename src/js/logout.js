@@ -1,4 +1,4 @@
-import { User } from 'kinvey-html5-sdk/lib/user';
+import { User } from 'kinvey-html5-sdk';
 import './app';
 
 User.logout()
