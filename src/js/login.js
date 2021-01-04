@@ -1,14 +1,17 @@
 import $ from 'jquery';
-import * as DataStore from 'kinvey-html5-sdk/lib/datastore';
-import { User } from 'kinvey-html5-sdk/lib/user';
+import { User } from 'kinvey-html5-sdk/lib';
 import './app';
 import '../styles/login.scss';
 
 $(function () {
-  function login() {
-    var username = $('#inputUsername').val();
-    var password = $('#inputPassword').val();
-    return User.login(username, password);
+  function login(username, password) {
+    return User.logout()
+      .then(function () {
+        return User.login(username, password);
+      })
+      .then(function () {
+        window.location.assign('/index.html');
+      });
   }
 
   function loginWithMIC() {
@@ -23,7 +26,9 @@ $(function () {
 
   $('.form-login').on('submit', function (event) {
     event.preventDefault();
-    login();
+    var username = $('#inputUsername').val();
+    var password = $('#inputPassword').val();
+    login(username, password);
   });
 
   $('#login-mic').on('click', function () {

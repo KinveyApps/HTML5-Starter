@@ -1,5 +1,5 @@
 const Path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -10,17 +10,18 @@ module.exports = {
     dashboard: Path.resolve(__dirname, './src/js/dashboard'),
     login: Path.resolve(__dirname, './src/js/login'),
     logout: Path.resolve(__dirname, './src/js/logout'),
-    polyfills: Path.resolve(__dirname, './src/js/polyfills')
   },
   output: {
     path: dest,
     filename: '[name].[hash].js'
   },
   plugins: [
-    new CleanWebpackPlugin([dest], { root: Path.resolve(__dirname, '..') }),
-    new CopyWebpackPlugin([
-      { from: Path.resolve(__dirname, './public'), to: 'public' }
-    ]),
+    new CleanWebpackPlugin(),
+    new CopyWebpackPlugin({
+        patterns: [
+            { from: Path.resolve(__dirname, './public'), to: 'public' }
+        ]
+    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: Path.resolve(__dirname, './src/pages/dashboard.html'),

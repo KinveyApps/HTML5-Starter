@@ -10,18 +10,17 @@
     "dev": "webpack-dev-server --open --config webpack.dev.js"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
-    "bootstrap": "4.1.3",
-    "jquery": "3.3.1",
-    "kinvey-html5-sdk": "4.0.0",
+    "bootstrap": "^4.5.3",
+    "jquery": "^3.5.1",
+    "kinvey-html5-sdk": "^5.0.1",
     "popper.js": "1.14.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
-    "babel-preset-es2015": "^6.24.1",
-    "clean-webpack-plugin": "^0.1.19",
-    "copy-webpack-plugin": "^4.5.2",
+    "babel-preset-env": "^1.7.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^6.2.1",
     "css-loader": "^1.0.0",
     "eslint": "^5.4.0",
     "eslint-loader": "^2.1.0",
@@ -51,7 +50,11 @@
   },
   "babel": {
     "presets": [
-      "es2015"
+      "env"
     ]
-  }
+  },
+  "browserslist": [
+    "last 2 versions and not dead",
+    "> 0.2%"
+  ]
 }
