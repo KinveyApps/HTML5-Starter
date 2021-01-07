@@ -1,5 +1,5 @@
-import * as DataStore from 'kinvey-html5-sdk/lib/datastore';
-import { User } from 'kinvey-html5-sdk/lib/user';
+import { DataStore } from 'kinvey-html5-sdk/lib';
+import { User } from 'kinvey-html5-sdk/lib';
 import 'bootstrap';
 import './app';
 

@@ -1,5 +1,5 @@
 # HTML5-Starter
-A Kinvey starter application that uses the Kinvey HTML5 3.x SDK.
+A Kinvey starter application that uses the Kinvey HTML5 5.x SDK.
 
 ### Installation
 
